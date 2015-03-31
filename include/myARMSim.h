@@ -1,13 +1,12 @@
-/* 
-
+/*******************************************************************************
 The project is developed as part of Computer Architecture class
 Project Name: Functional Simulator for subset of ARM Processor
 
-Developer's Name:
-Developer's Email id:
-Date: 
+Developer's Name: Nalin Gupta && Sahar Siddiqui
+Developer's Email id: nalin14065@iiitd.ac.in && sahar14091@iiitd.ac.in
+Date: 31 March 2015
+********************************************************************************/
 
-*/
 
 
 /* myARMSim.h
