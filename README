@@ -30,7 +30,7 @@ CS112-Project
       |- myARMSim.h
   |- test
       |- simple_add.mem
-      |- fib.mem
+      |- fib_hex.mem
       |- array_add.mem
 
 How to build
@@ -46,5 +46,6 @@ For cleaning the project:
 
 How to execute
 --------------
-./myARMSim test/simple_add.mem
+  $cd bin
+  $./myARMSim ../test/simple_add.mem
 
