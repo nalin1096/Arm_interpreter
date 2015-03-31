@@ -310,6 +310,8 @@ void branch_execute(){
     PC += (int)offset + 8;
     printf("EXECUTE: PC gets the memory location 0x%X\n",read_word(MEM,PC+4));
   }
+  else 
+    printf("EXECUTE: No execute operation\n");
 }
 
 //executes the ALU operation based on ALUop
