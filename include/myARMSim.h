@@ -34,4 +34,5 @@ void write_back();
 
 int read_word(char *mem, unsigned int address);
 void write_word(char *mem, unsigned int address, unsigned int data);
+void mem_write_word(char *mem, unsigned int address, unsigned int data);
 

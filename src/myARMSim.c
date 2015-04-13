@@ -24,7 +24,6 @@ static unsigned int R[16];
 static int N,C,V,Z;
 //memory
 static unsigned char MEM[4000];
-static unsigned char HEAP[4000];
 
 //intermediate datapath and control path signals
 static unsigned int instruction_word;
@@ -72,7 +71,6 @@ void reset_proc() {
   }
   for (i=0;i<4000;i++){
     MEM[i] = 0;
-    HEAP[i] = 0;
   }
   N=C=V=Z=0;
 }
@@ -215,7 +213,7 @@ void dp_decode () {
 
 void dt_decode () {
   L = (hex & 0x00100000) >> 20;
-  if(L == 0){
+  if(L == 0){ //str
     if (!immediate){
       offset = (hex & 0x00000FFF);
       printf("DECODE: Operation is STR, First operand R%d, offset #%d, destination register R%d\n",Rn,offset,Rd);
@@ -227,7 +225,7 @@ void dt_decode () {
       printf("DECODE: Read register R%d = %d, offset = %d\n",Rn,R[Rn],R[offset]);
     }   
   }
-  else if(L == 1){
+  else if(L == 1){  //ldr
     if (!immediate){
       offset = (hex & 0x00000FFF);
       printf("DECODE: Operation is LDR, First operand R%d, offset #%d, destination register R%d\n",Rn,offset,Rd);
@@ -271,7 +269,7 @@ void decode() {
   S = (hex & 0x00080000)>>20;
   Rn=(hex & 0x000F0000)>>16;
   Rd=(hex & 0x0000F000)>>12;
-  if(format==0)
+  if(format==0) //dp
   {
     if (immediate) {
       op2 = (hex & 0x000000FF);
@@ -285,18 +283,18 @@ void decode() {
     }
     dp_decode ();
   }
-  else if (format == 1){
+  else if (format == 1){  //dt
     dt_decode();
   }
 
-  else if(format == 2)
+  else if(format == 2)  //branch
   {
     link = (hex & 0x01000000) >> 24;
     branch_decode();
   }
 
-  else if (format == 3){
-      printf("Exit BRO!! XD\n\n");
+  else if (format == 3){  //exit
+      printf("Exit\n\n");
       swi_exit();
   }
 }
@@ -451,11 +449,11 @@ void mem() {
   }
   if (format == 1) {
     if (L==0) {
-      write_word (HEAP,mem_loc,R[Rd]);
+      mem_write_word (MEM,mem_loc,R[Rd]);
       printf("MEMORY: Store %d in Heap memory\n",R[Rd]);
     }
     else if (L==1){
-      temp = read_word(HEAP,mem_loc);
+      temp = read_word(MEM,mem_loc);
       printf("MEMORY: Load %d from Heap memory\n",temp);
     }
   }
@@ -499,6 +497,13 @@ int read_word(char *mem, unsigned int address) {
 }
 
 void write_word(char *mem, unsigned int address, unsigned int data) {
+  int *data_p;
+  data_p = (int*) (mem + address + 2000);
+  *data_p = data;
+}
+
+
+void mem_write_word(char *mem, unsigned int address, unsigned int data) {
   int *data_p;
   data_p = (int*) (mem + address);
   *data_p = data;
